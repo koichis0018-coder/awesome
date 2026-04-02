@@ -121,3 +121,232 @@
 
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiteMatch - マッチングアプリ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff4b6e;
+            --secondary: #2ecc71;
+            --gray: #f0f2f5;
+            --text: #333;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: var(--gray);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ヘッダー */
+        header {
+            background: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 1.5rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        /* カードエリア */
+        .card-container {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 20px;
+        }
+
+        .card {
+            position: absolute;
+            width: 100%;
+            max-width: 350px;
+            height: 500px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: none; /* 初期は非表示 */
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+
+        .card.active {
+            display: flex;
+        }
+
+        .card-img {
+            height: 70%;
+            background: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+        }
+
+        .card-info {
+            padding: 20px;
+        }
+
+        .card-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .card-bio {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* 操作ボタン */
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 20px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.05));
+        }
+
+        .btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: transform 0.1s;
+        }
+
+        .btn:active { transform: scale(0.9); }
+        .btn-skip { background: white; color: #e74c3c; }
+        .btn-like { background: var(--primary); color: white; }
+
+        /* マッチングポップアップ */
+        #match-popup {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 75, 110, 0.95);
+            color: white;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            text-align: center;
+        }
+
+        #match-popup h2 { font-size: 2.5rem; margin-bottom: 10px; }
+        .close-popup {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: white;
+            color: var(--primary);
+            border: none;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        /* 下部ナビ */
+        nav {
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+
+<header>LiteMatch</header>
+
+<div class="card-container" id="container">
+    </div>
+
+<div class="actions">
+    <button class="btn btn-skip" onclick="nextCard('skip')">✖</button>
+    <button class="btn btn-like" onclick="nextCard('like')">❤</button>
+</div>
+
+<div id="match-popup">
+    <h2>It's a Match!</h2>
+    <p>お互いに「いいね」しました！</p>
+    <button class="close-popup" onclick="closePopup()">メッセージを送る</button>
+</div>
+
+<nav>
+    <span>🔥</span>
+    <span>💬</span>
+    <span>👤</span>
+</nav>
+
+<script>
+    const users = [
+        { name: "サトシ, 24", bio: "カフェ巡りとカメラが趣味です。", color: "#3498db" },
+        { name: "ユウカ, 22", bio: "最近キャンプにハマっています！", color: "#e67e22" },
+        { name: "ケンタ, 28", bio: "エンジニアやってます。猫派です。", color: "#9b59b6" },
+        { name: "アイ, 26", bio: "一緒に美味しいご飯食べに行きましょう。", color: "#1abc9c" }
+    ];
+
+    let currentIndex = 0;
+
+    function renderCard() {
+        const container = document.getElementById('container');
+        container.innerHTML = '';
+        
+        if (currentIndex >= users.length) {
+            container.innerHTML = '<p>周りにユーザーがいません...</p>';
+            return;
+        }
+
+        const user = users[currentIndex];
+        const card = document.createElement('div');
+        card.className = 'card active';
+        card.innerHTML = `
+            <div class="card-img" style="background-color: ${user.color}">👤</div>
+            <div class="card-info">
+                <div class="card-name">${user.name}</div>
+                <div class="card-bio">${user.bio}</div>
+            </div>
+        `;
+        container.appendChild(card);
+    }
+
+    function nextCard(type) {
+        if (currentIndex >= users.length) return;
+
+        // ライクのとき、25%の確率でマッチング
+        if (type === 'like' && Math.random() > 0.75) {
+            document.getElementById('match-popup').style.display = 'flex';
+        }
+
+        currentIndex++;
+        renderCard();
+    }
+
+    function closePopup() {
+        document.getElementById('match-popup').style.display = 'none';
+    }
+
+    // 初回表示
+    renderCard();
+</script>
+
+</body>
+</html>
