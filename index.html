@@ -7,3 +7,117 @@
 <font color="red">hellow world!
 </body>
 </html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>マイ・スタティックサイト</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* スタイル設定 */
+        :root {
+            --primary-color: #3498db;
+            --text-color: #333;
+            --bg-color: #f4f7f6;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: #fff;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        section {
+            background: #fff;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        h1 { color: var(--primary-color); margin-bottom: 0.5rem; }
+        h2 { border-bottom: 2px solid var(--primary-color); padding-bottom: 0.5rem; }
+
+        .profile-img {
+            width: 120px;
+            height: 120px;
+            background: #ddd;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 600px) {
+            .container { margin: 1rem auto; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="profile-img">PHOTO</div>
+    <h1>ようこそ、私のサイトへ</h1>
+    <p>シンプルで美しい静的HTMLのデモページです。</p>
+</header>
+
+<div class="container">
+    <section id="about">
+        <h2>自己紹介</h2>
+        <p>
+            こんにちは！これはHTMLとCSSのみで作成された1枚完結のポートフォリオ／紹介サイトのサンプルです。
+            外部ファイルを読み込まず、このファイルひとつで構成されています。
+        </p>
+    </section>
+
+    <section id="services">
+        <h2>提供できること</h2>
+        <ul>
+            <li><strong>Webデザイン:</strong> シンプルで使いやすいUIの提案。</li>
+            <li><strong>HTML/CSS構築:</strong> 構造化された綺麗なコーディング。</li>
+            <li><strong>スピード:</strong> 静的サイトならではの高速な表示。</li>
+        </ul>
+    </section>
+
+    <section id="contact">
+        <h2>お問い合わせ</h2>
+        <p>ご興味があれば、SNSやメールでお気軽にご連絡ください。</p>
+        <p style="text-align: center;">
+            <a href="mailto:example@email.com" style="color: var(--primary-color);">example@email.com</a>
+        </p>
+    </section>
+</div>
+
+<footer>
+    &copy; 2026 My Static Site. All rights reserved.
+</footer>
+
+</body>
+</html>
